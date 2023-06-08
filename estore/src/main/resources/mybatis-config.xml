@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--读取配置文件application.properties -->
+	<properties resource="application.properties"></properties>
+	<!--配置全局参数 NULL -->
+	<settings>
+		<setting name="jdbcTypeForNull" value="VARCHAR" />
+	</settings>
+	<!--类的全限定名起别名 -->
+	<typeAliases>
+		<package name="com.briup.bean" />
+		<package name="com.briup.vo" />
+	</typeAliases>
+	<!--mybatis当前工作环境 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"></transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driverClassName}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<!--映射文件 -->
+	<mappers>
+		<mapper resource="mappers/UserMapper.xml" />
+		<mapper resource="mappers/ReportMapper.xml" />
+		<mapper resource="mappers/CategoryMapper.xml" />
+		<mapper resource="mappers/CategoryDetailMapper.xml" />
+		<mapper resource="mappers/ProductMapper.xml" />
+		<mapper resource="mappers/ShopCartItemMapper.xml" />
+		<mapper resource="mappers/OrderMapper.xml" />
+		<mapper resource="mappers/OrderLineMapper.xml" />
+	</mappers>
+
+</configuration>
