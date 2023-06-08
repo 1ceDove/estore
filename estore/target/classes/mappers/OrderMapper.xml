@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.dao.OrderDao">
+	
+	<insert id="saveOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
+		insert into es_order(orderid,paystatus,receivename,receiveaddress,receivephone,sum,dob,user_id)
+		values(#{orderid},#{paystatus},#{receivename},#{receiveaddress},#{receivephone},#{sum},#{dob},#{user.id})
+	</insert>
+	
+	<resultMap type="com.briup.vo.OrderShopInfo" id="OrderShopInfoResult">
+		<id column="orderid" property="orderid"/>
+		<result column="paystatus" property="paystatus"/>
+		<result column="num" property="num"/>
+		<result column="name" property="name"/>
+		<result column="price" property="price"/>
+		<result column="img" property="img"/>
+	</resultMap>		
+		
+	<select id="listAllOrder" parameterType="Long" resultMap="OrderShopInfoResult">
+		select o.orderid,o.paystatus,l.num,p.name,p.price,p.img
+		from es_order o,es_orderline l,es_product p
+		where o.user_id = #{uid} and o.id = l.order_id and l.product_id = p.id
+		order by o.id desc
+	</select>
+	
+	<select id="findOrderByOrderid" parameterType="String" resultType="Order">
+		select id,orderid,paystatus,receivename,receiveaddress,receivephone,sum,dob
+		from es_order
+		where orderid=#{orderid}
+	</select>
+	
+	<update id="updateOrderStatus" parameterType="String">
+		update es_order
+		set paystatus = 1
+		where orderid = #{orderid}
+	</update>
+	
+	<delete id="delOrder" parameterType="String">
+		delete from es_order	
+		where orderid = #{orderid}
+	</delete>
+	
+</mapper>

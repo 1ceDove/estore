@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.dao.ShopCartItemDao">
+	<resultMap type="ShopCartItem" id="ShopCartItemResult">
+		<id column="id" property="id" />
+		<result column="num" property="num" />
+		<result column="user_id" property="user.id" />
+		<result column="product_id" property="product.id" />
+	</resultMap>
+
+	<select id="ShopCartItemByUserIdAndProductId"
+		resultMap="ShopCartItemResult">
+		select id,num,user_id,product_id
+		from es_shopcart_item
+		where
+		user_id = #{param1} and product_id = #{param2}
+	</select>
+
+	<update id="updateShopCartItem" parameterType="ShopCartItem">
+		update
+		es_shopcart_item
+		set num = #{num}
+		where id = #{id}
+	</update>
+
+	<insert id="saveShopCartItem" parameterType="ShopCartItem"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		es_shopcart_item(num,user_id,product_id)
+		values(#{num},#{user.id},#{product.id})
+	</insert>
+
+	<resultMap type="ShopItemInfo" id="ShopItemInfoResult">
+		<id column="id" property="id" />
+		<result column="num" property="num" />
+		<result column="pid" property="pid" />
+		<result column="name" property="name" />
+		<result column="price" property="price" />
+		<result column="img" property="img" />
+	</resultMap>
+
+	<sql id="query">
+		s.id,s.num,s.product_id pid,p.name,p.price,p.img
+	</sql>
+
+	<select id="listItemByUserId" parameterType="Long"
+		resultMap="ShopItemInfoResult">
+		select
+		<include refid="query"></include>
+		from es_shopcart_item s,es_product p
+		where s.user_id = #{uid} and
+		s.product_id = p.id
+	</select>
+
+	<delete id="deleteShopCartItem" parameterType="Long">
+		delete from
+		es_shopcart_item
+		where id = #{id}
+	</delete>
+
+	<select id="listItemByIds" parameterType="String"
+		resultMap="ShopItemInfoResult">
+		select
+		<include refid="query"></include>
+		from es_shopcart_item s,es_product p
+		where s.id in (${_parameter}) and
+		s.product_id = p.id
+	</select>
+</mapper>

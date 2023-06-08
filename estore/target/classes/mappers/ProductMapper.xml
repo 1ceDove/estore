@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.dao.ProductDao">
+	<sql id="query">
+		id,name,price,publish,img,parameter,introduction,wraplist,hot,remain,sellnum,clickrate,publishdate
+	</sql>
+	
+	<select id="listAllProduct" resultType="Product">
+		select <include refid="query"></include>
+		from es_product
+	</select>	
+		
+	<select id="listHostProducet" resultType="Product">
+		select <include refid="query"></include>
+		from es_product
+		where hot = 1
+		limit 0,3
+	</select>
+	
+	<resultMap type="CategoryDetail" id="CategoryDetailResult">
+		<id column="did" property="id"/>
+		<result column="dname" property="name"/>
+	</resultMap>
+	<resultMap type="Product" id="ProductResult">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="price" property="price"/>
+		<result column="publish" property="publish"/>
+		<result column="img" property="img"/>
+		<result column="parameter" property="parameter"/>
+		<result column="introduction" property="introduction"/>
+		<result column="wraplist" property="wraplist"/>
+		<result column="hot" property="hot"/>
+		<result column="remain" property="remain"/>
+		<result column="sellnum" property="sellnum"/>
+		<result column="clickrate" property="clickrate"/>
+		<result column="publishdate" property="publishdate"/>
+		<collection property="cate_detail" resultMap="CategoryDetailResult"></collection>
+	</resultMap>
+	<select id="selectProductById" parameterType="Long" resultMap="ProductResult">
+		select p.id,p.name,p.price,p.publish,p.img,p.parameter,p.introduction,p.wraplist,p.hot,p.remain,p.sellnum,p.clickrate,p.publishdate,
+		       d.id did,d.name dname 
+		from es_product p,es_category_detail d
+		where p.id = #{id} and p.cate_detail_id = d.id
+	</select>
+</mapper>

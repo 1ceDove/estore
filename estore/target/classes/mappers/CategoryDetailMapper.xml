@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.dao.CategoryDetailDao">
+	
+	<select id="getCategoryDetailsByCategoryId" parameterType="Long" resultType="CategoryDetail">
+		select id,name
+		from es_category_detail
+		where category_id = #{id}
+	</select>	
+		
+</mapper>
